@@ -136,6 +136,20 @@ legend("topleft",legend =c("other","r>0, p<0.05"),col=unique(vp[,14]),pch=19)
 abline(h=log10(0.05)*-1,v=0,lty=2)
 dev.off()
 
+# cutoff n < 50
+vp1 <-vp[vp[,5]>=50,]
+vp1 <-vp1[!is.na(vp1[3]),]
+vp1[,14] <-NA
+vp1[vp1[,3]>0&vp1[,4]<0.05,14] <-"red"
+vp1[vp1[,3]<=0|vp1[,4]>=0.05,14] <-"grey40"
+
+pdf("valcano_plot_about_TCGA_colon_correlation_between_expression_level_of_transcript_and_miRNA_cutoff_50.pdf")
+plot(vp1[,3],-log10(vp1[,4]),xlab="correlation coefficient",ylab="-log10 (p.value)",col=vp1[,14],pch=19,
+     main = paste0("r>0 p<0.05 ",nrow(vp1[vp1[,14]=="red",]),"/",nrow(vp1)," (sig.posi / total)"))
+legend("topleft",legend =c("other","r>0, p<0.05"),col=unique(vp1[,14]),pch=19)
+abline(h=log10(0.05)*-1,v=0,lty=2)
+dev.off()
+
 ### draw scatter plot to investigate whether combinations without correlation have small mean of miRNA/transcript expression 
 # remove NA row and annotate whether combinations have significant positive correlations
 sp <-sm
